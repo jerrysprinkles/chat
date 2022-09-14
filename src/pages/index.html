@@ -1,0 +1,21 @@
+<script type='text/javascript'>
+    var name = prompt("Enter your name", "");
+    if (name) { document.write(`<txt style='color:#ffffff;font:1.35vmax "Trebuchet MS", sans-serif;'>Welcome, ` + name + `</txt>`); }
+    var conn = new WebSocket('wss://carnagertc.glitch.me');
+    conn.onmessage = function(event) { document.getElementById('bruh').innerHTML += event.data + '<br>'; document.getElementById('bruh').scrollTop = document.getElementById('bruh').scrollHeight };
+    conn.onopen = function(e) { alert('Connected successfully!'); conn.send(name+' joined the chat!'); };
+    function send() { conn.send(name + ': ' + document.getElementById('message').value); document.getElementById('message').value = ''; }
+    function scan(input) { var key = window.event.keyCode; if (key === 13) { send() } }
+    window.onbeforeunload = function() { conn.send(`${name} has left the chat.`); conn.close(1000, 'Browser closed'); }
+</script>
+<body style='background-color:182841'>
+    <word style='color:#ffffff;font:1.35vmax "Trebuchet MS", sans-serif;'>
+    <br><br><br>
+    <div style='border: 0.5vmin solid #bdb76b;border-radius: 3vmin;max-height: 75%;overflow-y: auto;' id='bruh'></div>
+
+    <center>
+        <br><br>
+        <input id='message' autocomplete='off' placeholder='Message here' onkeypress="scan(this)"/>
+        <button type='submit' onclick="send()">Send</button>
+    </center>
+</body>
